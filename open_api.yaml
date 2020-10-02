@@ -1,0 +1,262 @@
+swagger: "2.0"
+info:
+  description: "Simple calculator. Allows following operations: add, sub, div, mul."
+  version: "1.0.0"
+  title: "API Calculator"
+
+host: "localhost:8080"
+basePath: "/v1"
+
+tags:
+- name: "Calculator"
+  description: "Basic operations"
+- name: "History"
+  description: "Allow to retrieve calculation history"
+
+schemes:
+- "http"
+
+paths:
+  /add:
+    post:
+      tags:
+      - "Calculator"
+      summary: "Sum numbers"
+      operationId: "calculateAdd"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Numbers that needs to be calculated"
+        required: true
+        schema:
+          $ref: "#/definitions/NumbersToCalculate"
+      responses:
+        "200":
+          description: "Result value of calculation"
+          schema:
+            $ref: "#/definitions/Number"
+        "406":
+          description: "Invalid input"
+          schema:
+            $ref: "#/definitions/ApiErrorResponse"
+        "500":
+          description: "Server error"
+          schema:
+            allOf:
+              - $ref: "#/definitions/ApiErrorResponse"
+              - properties:
+                  message:
+                    example: "Unable to perform math"
+  /sub:
+    post:
+      tags:
+      - "Calculator"
+      summary: "Subtract numbers"
+      operationId: "calculateSub"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Numbers that needs to be subtracted"
+        required: true
+        schema:
+          $ref: "#/definitions/NumbersToCalculate"
+      responses:
+        "200":
+          description: "Result value of calculation"
+          schema:
+            $ref: "#/definitions/Number"
+        "406":
+          description: "Invalid input"
+          schema:
+            $ref: "#/definitions/ApiErrorResponse"
+        "500":
+          description: "Server error"
+          schema:
+            allOf:
+              - $ref: "#/definitions/ApiErrorResponse"
+              - properties:
+                  message:
+                    example: "Unable to perform math"
+  /div:
+    post:
+      tags:
+      - "Calculator"
+      summary: "Divide numbers"
+      operationId: "calculateDiv"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Numbers that needs to be divided"
+        required: true
+        schema:
+          $ref: "#/definitions/NumbersToCalculate"
+      responses:
+        "200":
+          description: "Result value of calculation"
+          schema:
+            $ref: "#/definitions/Number"
+        "406":
+          description: "Invalid input"
+          schema:
+            $ref: "#/definitions/ApiErrorResponse"
+        "500":
+          description: "Server error"
+          schema:
+            allOf:
+              - $ref: "#/definitions/ApiErrorResponse"
+              - properties:
+                  message:
+                    example: "Unable to perform math"
+  /mul:
+    post:
+      tags:
+      - "Calculator"
+      summary: "Multiply numbers"
+      operationId: "calculateMul"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Numbers that needs to be multiplied"
+        required: true
+        schema:
+          $ref: "#/definitions/NumbersToCalculate"
+      responses:
+        "200":
+          description: "Result value of calculation"
+          schema:
+            $ref: "#/definitions/Number"
+        "406":
+          description: "Invalid input"
+          schema:
+            $ref: "#/definitions/ApiErrorResponse"
+        "500":
+          description: "Server error"
+          schema:
+            allOf:
+              - $ref: "#/definitions/ApiErrorResponse"
+              - properties:
+                  message:
+                    example: "Unable to perform math"
+  /history:
+    get:
+      tags:
+      - "History"
+      summary: "Retrieve last calculation results"
+      operationId: "findLast"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "limit"
+        in: "query"
+        description: "Limit result count"
+        required: false
+        type: "integer"
+        default: "5"
+      responses:
+        "200":
+          description: "Found items. Or empty array"
+          schema:
+            $ref: '#/definitions/HistoryCollection'
+        "500":
+          description: "Server error"
+          schema:
+            allOf:
+              - $ref: "#/definitions/ApiErrorResponse"
+              - properties:
+                  message:
+                    example: "Something went wrong"
+
+definitions:
+  Number:
+    type: "number"
+    example: 24543.23
+  NumbersToCalculate:
+    #type: "object"
+    properties:
+      numberA:
+        $ref: "#/definitions/Number"
+      numberB:
+        $ref: "#/definitions/Number"
+  HistoryItem:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      calculation:
+        type: "string"
+        enum:
+        - "add"
+        - "sub"
+        - "div"
+        - "mul"
+      numberA:
+        $ref: "#/definitions/Number"
+      numberB:
+        $ref: "#/definitions/Number"
+      result:
+        $ref: "#/definitions/Number"
+  HistoryCollection:
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: "#/definitions/HistoryItem"
+        example:
+          - id: 1
+            calculation: "div"
+            numberA: 10
+            numberB: 2
+            result: 5
+          - id: 2
+            calculation: "add"
+            numberA: 11
+            numberB: 5
+            result: 16
+          - id: 3
+            calculation: "add"
+            numberA: 100
+            numberB: 50
+            result: 150
+          - id: 4
+            calculation: "sub"
+            numberA: 175
+            numberB: 50
+            result: 125
+          - id: 5
+            calculation: "mul"
+            numberA: 20
+            numberB: 4
+            result: 80
+      count:
+        type: integer
+        example: 5
+  ApiErrorResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+        example: 100100
+      message:
+        type: "string"
+        example: "Division by zero"
+externalDocs:
+  description: "Source code"
+  url: "https://github.com/raketsky/calculator"
