@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v4.1.1">
+    <title>{% block title %}Calculator{% endblock %}</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="theme-color" content="#563d7c">
+    
+    <style>
+		.bd-placeholder-img {
+			font-size: 1.125rem;
+			text-anchor: middle;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+		}
+		
+		@media (min-width: 768px) {
+			.bd-placeholder-img-lg {
+				font-size: 3.5rem;
+			}
+		}
+    </style>
+    <!-- Custom styles for this template -->
+    <link href="/css/floating-labels.css" rel="stylesheet">
+</head>
+<body>
+<form class="form-signin">
+    <div class="text-center mb-4">
+        <h1 class="h3 mb-3 font-weight-normal">Calculator</h1>
+        <p>Simple calculator that can do some basic math
+            <br><span class="text-muted">(add, sub, div, mul)</span></p>
+    </div>
+    
+    <div class="form-label-group">
+        <input type="text" id="resultValue" class="form-control text-right text-strong text-05x" value="0" disabled>
+    </div>
+    
+    <div class="row">
+        <div class="col-6">
+            <div class="form-label-group">
+                <input type="text" id="numberA" class="form-control" placeholder="Number A" required autofocus>
+                <label for="inputEmail">Number A</label>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-label-group">
+                <input type="text" id="numberB" class="form-control" placeholder="Number B" required autofocus>
+                <label for="inputEmail">Number B</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-4 offset-2">
+            <button id="calculateAdd" class="btn btn-lg btn-primary btn-block" type="submit">+</button>
+        </div>
+        <div class="col-4">
+            <button id="calculateSub" class="btn btn-lg btn-primary btn-block" type="submit">-</button>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-4 offset-2">
+            <button id="calculateMul" class="btn btn-primary btn-block" type="submit">*</button>
+        </div>
+        <div class="col-4">
+            <button id="calculateDiv" class="btn btn-primary btn-block" type="submit">/</button>
+        </div>
+    </div>
+</form>
+<script
+      src="https://code.jquery.com/jquery-3.4.1.min.js"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous"></script>
+<script>
+    $("#calculateAdd").bind("click", function(e) {
+    	e.preventDefault();
+    	
+    	$("#resultValue").val("0");
+    	$.ajax("/api/v1/add",{
+            data: JSON.stringify({
+                numberA: $("#numberA").val(),
+                numberB: $("#numberB").val()
+            }),
+            type: "POST",
+            dataType: "json",
+            success: function(data){
+            	$("#resultValue").val(data.data.attributes.result);
+            },
+            error: function(){
+                $("#resultValue").val(data.message);
+            },
+            processData: false,
+            contentType: "application/json",
+        });
+        
+        return false;
+    })
+    
+    $("#calculateSub").bind("click", function(e) {
+    	e.preventDefault();
+    	
+    	$("#resultValue").val("0");
+    	$.ajax("/api/v1/sub",{
+            data: JSON.stringify({
+                numberA: $("#numberA").val(),
+                numberB: $("#numberB").val()
+            }),
+            type: "POST",
+            dataType: "json",
+            success: function(data){
+            	$("#resultValue").val(data.data.attributes.result);
+            },
+            error: function(){
+                $("#resultValue").val(data.message);
+            },
+            processData: false,
+            contentType: "application/json",
+        });
+        
+        return false;
+    })
+    $("#calculateMul").bind("click", function(e) {
+    	e.preventDefault();
+    	
+    	$("#resultValue").val("0");
+    	$.ajax("/api/v1/mul",{
+            data: JSON.stringify({
+                numberA: $("#numberA").val(),
+                numberB: $("#numberB").val()
+            }),
+            type: "POST",
+            dataType: "json",
+            success: function(data){
+            	$("#resultValue").val(data.data.attributes.result);
+            },
+            error: function(){
+                $("#resultValue").val(data.message);
+            },
+            processData: false,
+            contentType: "application/json",
+        });
+        
+        return false;
+    })
+    $("#calculateDiv").bind("click", function(e) {
+    	e.preventDefault();
+    	
+    	$("#resultValue").val("0");
+    	$.ajax("/api/v1/div",{
+            data: JSON.stringify({
+                numberA: $("#numberA").val(),
+                numberB: $("#numberB").val()
+            }),
+            type: "POST",
+            dataType: "json",
+            success: function(data){
+            	$("#resultValue").val(data.data.attributes.result);
+            },
+            error: function(){
+                $("#resultValue").val(data.message);
+            },
+            processData: false,
+            contentType: "application/json",
+        });
+        
+        return false;
+    })
+    
+</script>
+{% block javascripts %}{% endblock %}
+</body>
+</html>
