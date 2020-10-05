@@ -2,10 +2,10 @@ swagger: "2.0"
 info:
   description: "Simple calculator. Allows following operations: add, sub, div, mul."
   version: "1.0.0"
-  title: "API Calculator"
+  title: "Calculator API"
 
 host: "localhost:8080"
-basePath: "/v1"
+basePath: "/api/v1"
 
 tags:
 - name: "Calculator"
@@ -38,7 +38,7 @@ paths:
         "200":
           description: "Result value of calculation"
           schema:
-            $ref: "#/definitions/Number"
+            $ref: "#/definitions/ApiSuccessResponse"
         "406":
           description: "Invalid input"
           schema:
@@ -72,7 +72,7 @@ paths:
         "200":
           description: "Result value of calculation"
           schema:
-            $ref: "#/definitions/Number"
+            $ref: "#/definitions/ApiSuccessResponse"
         "406":
           description: "Invalid input"
           schema:
@@ -106,7 +106,7 @@ paths:
         "200":
           description: "Result value of calculation"
           schema:
-            $ref: "#/definitions/Number"
+            $ref: "#/definitions/ApiSuccessResponse"
         "406":
           description: "Invalid input"
           schema:
@@ -140,7 +140,7 @@ paths:
         "200":
           description: "Result value of calculation"
           schema:
-            $ref: "#/definitions/Number"
+            $ref: "#/definitions/ApiSuccessResponse"
         "406":
           description: "Invalid input"
           schema:
@@ -198,19 +198,26 @@ definitions:
     properties:
       id:
         type: "integer"
-      calculation:
+        example: 23
+      type:
         type: "string"
-        enum:
-        - "add"
-        - "sub"
-        - "div"
-        - "mul"
-      numberA:
-        $ref: "#/definitions/Number"
-      numberB:
-        $ref: "#/definitions/Number"
-      result:
-        $ref: "#/definitions/Number"
+        example: "calculations"
+      attributes:
+        type: "object"
+        properties:
+          calculationOperation:
+            type: "string"
+            enum:
+            - "add"
+            - "sub"
+            - "div"
+            - "mul"
+          numberA:
+            $ref: "#/definitions/Number"
+          numberB:
+            $ref: "#/definitions/Number"
+          result:
+            $ref: "#/definitions/Number"
   HistoryCollection:
     type: object
     properties:
@@ -220,33 +227,48 @@ definitions:
           $ref: "#/definitions/HistoryItem"
         example:
           - id: 1
-            calculation: "div"
-            numberA: 10
-            numberB: 2
-            result: 5
+            type: "calculations"
+            attributes:
+              calculationOperation: "div"
+              numberA: 10
+              numberB: 2
+              result: 5
           - id: 2
-            calculation: "add"
-            numberA: 11
-            numberB: 5
-            result: 16
+            type: "calculations"
+            attributes:
+              calculationOperation: "add"
+              numberA: 11
+              numberB: 5
+              result: 16
           - id: 3
-            calculation: "add"
-            numberA: 100
-            numberB: 50
-            result: 150
+            type: "calculations"
+            attributes:
+              calculationOperation: "add"
+              numberA: 100
+              numberB: 50
+              result: 150
           - id: 4
-            calculation: "sub"
-            numberA: 175
-            numberB: 50
-            result: 125
+            type: "calculations"
+            attributes:
+              calculationOperation: "sub"
+              numberA: 175
+              numberB: 50
+              result: 125
           - id: 5
-            calculation: "mul"
-            numberA: 20
-            numberB: 4
-            result: 80
+            type: "calculations"
+            attributes:
+              calculationOperation: "mul"
+              numberA: 20
+              numberB: 4
+              result: 80
       count:
         type: integer
         example: 5
+  ApiSuccessResponse:
+    type: "object"
+    properties:
+      data:
+        $ref: "#/definitions/HistoryItem"
   ApiErrorResponse:
     type: "object"
     properties:

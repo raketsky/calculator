@@ -14,3 +14,8 @@ $ chmod +x start.sh && sh start.sh
 ```shell script
 $ chmod +x stop.sh && sh stop.sh
 ```
+
+## Open API documentation
+To test API directly, you can use Postman.
+URL to import: `http://localhost:8080/api/v1/doc.json`
+Documentation available in YAML as well.
