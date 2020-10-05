@@ -8,22 +8,21 @@ use App\Exception\AppExceptionInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 final class ApiExceptionSubscriber implements EventSubscriberInterface
 {
-    private string $env = 'dev';
+    private string $env;
 
-//    public function __construct(string $env)
-//    {
-//        $this->env = $env;
-//    }
+    public function __construct(string $env)
+    {
+        $this->env = $env;
+    }
 
     public function onExceptionEvent(ExceptionEvent $event): void
     {
-//        if ($this->env === 'dev') {
-//            return;
-//        }
+        if ($this->env === 'dev') {
+            return;
+        }
 
         $exception = $event->getThrowable();
         if ($exception instanceof AppExceptionInterface) {
